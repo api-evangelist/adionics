@@ -1,0 +1,262 @@
+openapi: 3.1.0
+info:
+  title: Adionics Media API
+  version: wp/v2
+  description: Public, unauthenticated read access to the adionics.com media library — plant and pilot photography,
+    process diagrams, brochures and press assets with their generated size variants — 551 attachments at capture
+    (2026-09-07).
+  contact:
+    name: Adionics
+    url: https://www.adionics.com/contact/
+  x-api-evangelist:
+    generated: '2026-09-07'
+    method: derived
+    source: https://www.adionics.com/wp-json/ (live WordPress REST route index, fetched 2026-09-07)
+    note: Derived from the self-describing WordPress REST route index published at https://www.adionics.com/wp-json/
+      and from live anonymous responses observed on 2026-09-07. Adionics publishes no OpenAPI of its own; every
+      path, method, parameter and response field below was observed on the live surface, none were invented.
+servers:
+- url: https://www.adionics.com/wp-json
+  description: Adionics WordPress REST API root
+tags:
+- name: Media
+paths:
+  /wp/v2/media:
+    get:
+      operationId: listMedia
+      summary: List media attachments
+      description: 'Anonymous access verified 2026-09-07 (HTTP 200, X-WP-Total: 551).'
+      tags:
+      - Media
+      parameters:
+      - name: context
+        in: query
+        description: Scope of the response. Anonymous callers may only use `view` or `embed`; `edit` returns 401.
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          default: view
+      - name: page
+        in: query
+        description: Current page of the collection (1-based).
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+      - name: per_page
+        in: query
+        description: Maximum number of items returned per page.
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+          maximum: 100
+      - name: search
+        in: query
+        description: Limit results to those matching a string.
+        schema:
+          type: string
+      - name: order
+        in: query
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: desc
+      - name: _fields
+        in: query
+        description: Comma-separated list of fields to return (sparse fieldsets).
+        schema:
+          type: string
+      - name: _embed
+        in: query
+        description: Embed linked resources (author, featured media, terms) into the `_embedded` member.
+        schema:
+          type: string
+      - name: media_type
+        in: query
+        schema:
+          type: string
+          enum:
+          - image
+          - video
+          - audio
+          - application
+          - file
+      - name: mime_type
+        in: query
+        schema:
+          type: string
+      - name: parent
+        in: query
+        schema:
+          type: array
+          items:
+            type: integer
+      responses:
+        '200':
+          description: A page of attachments.
+          headers:
+            X-WP-Total:
+              description: Total number of items in the collection.
+              schema:
+                type: integer
+            X-WP-TotalPages:
+              description: Total number of pages available.
+              schema:
+                type: integer
+            Link:
+              description: RFC 8288 pagination links (`rel="next"` / `rel="prev"`).
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MediaItem'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /wp/v2/media/{id}:
+    get:
+      operationId: getMediaItem
+      summary: Retrieve a single attachment
+      tags:
+      - Media
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: The attachment.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MediaItem'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    WPError:
+      type: object
+      description: The WordPress REST API error envelope. Not RFC 9457 problem+json.
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        data:
+          type: object
+          properties:
+            status:
+              type: integer
+      required:
+      - code
+      - message
+      - data
+    MediaItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        date:
+          type: string
+          format: date-time
+        modified:
+          type: string
+          format: date-time
+        slug:
+          type: string
+        status:
+          type: string
+        type:
+          type: string
+        link:
+          type: string
+          format: uri
+        title:
+          type: object
+          properties: &id001
+            rendered:
+              type: string
+        caption:
+          type: object
+          properties: *id001
+        description:
+          type: object
+          properties: *id001
+        alt_text:
+          type: string
+        author:
+          type: integer
+        post:
+          type:
+          - integer
+          - 'null'
+          description: Id of the post or page this attachment is attached to.
+        media_type:
+          type: string
+          enum:
+          - image
+          - file
+        mime_type:
+          type: string
+        source_url:
+          type: string
+          format: uri
+        filename:
+          type: string
+        filesize:
+          type: integer
+        has_video:
+          type: boolean
+        media_details:
+          type: object
+          description: Width, height, file, and the generated `sizes` map of derivative renditions.
+        acf:
+          type: object
+        meta:
+          type: object
+        _links:
+          type: object
+  responses:
+    NotFound:
+      description: The requested object does not exist, or is not publicly readable.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WPError'
+          example:
+            code: rest_post_invalid_id
+            message: Invalid post ID.
+            data:
+              status: 404
+    Forbidden:
+      description: The requested route or field requires an authenticated WordPress user. Returned anonymously as
+        HTTP 401 with code `rest_forbidden`.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WPError'
+          example:
+            code: rest_forbidden
+            message: Sorry, you are not allowed to do that.
+            data:
+              status: 401
+    BadRequest:
+      description: An invalid parameter was supplied.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WPError'
+          example:
+            code: rest_invalid_param
+            message: 'Invalid parameter(s): per_page'
+            data:
+              status: 400

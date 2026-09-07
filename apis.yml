@@ -1,23 +1,294 @@
 aid: adionics
 name: Adionics
-description: 'Adionics is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: >-
+  Adionics is a French cleantech company founded in 2012 in Paris by Guillaume de Souza, out of
+  research into liquid-liquid salt extraction started in 2007. It develops and licenses a patented
+  Direct Lithium Extraction (DLE) process built on Flionex, a proprietary, thermally regenerated
+  and highly selective liquid salt absorbent that captures lithium salts from brine at ambient
+  temperature and releases them at higher temperature in a closed loop, with no traditional
+  reagents and more than 90% less water than evaporation ponds. The company sells a staged
+  engagement to mining operators — a proprietary modeling study, a lab-scale bench test, an on-site
+  pilot plant, and basic engineering plus commissioning support for a commercial plant — targeting
+  lithium-rich salars, geothermal brines, oil-and-gas produced water, industrial effluents and
+  battery recycling streams. It has run 1,500 hours of continuous lithium extraction in the Salar
+  de Atacama, opened a pilot test centre in Salta Province, Argentina, and raised roughly $40M
+  across four rounds. Adionics is a process-technology and engineering company, not a software
+  vendor, and publishes no developer portal, no product API, no SDKs and no OpenAPI. The only
+  machine-readable interface it exposes is the WordPress REST content API behind www.adionics.com,
+  which is anonymously readable, read-only for the public, and captured here for discovery.
 url: https://raw.githubusercontent.com/api-evangelist/adionics/refs/heads/main/apis.yml
+image: https://www.adionics.com/wp-content/uploads/2022/05/clean-lithium-adionics-1024x393.jpg
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-09-07'
 modified: '2026-09-07'
+position: Producing
 tags:
 - Company
-apis: []
+- Cleantech
+- Lithium
+- Direct Lithium Extraction
+- Mining
+- Battery Materials
+- Water Treatment
+- Desalination
+- Geothermal
+- Industrial Process Technology
+- Sustainability
+- Content
+apis:
+- aid: adionics:adionics-posts-api
+  name: Adionics Posts API
+  description: >-
+    Public, unauthenticated read access to the Adionics news and press archive — company milestones,
+    partnership announcements, pilot-plant results and conference appearances — via the WordPress core
+    REST API. Verified live at 228 published posts on 2026-09-07.
+  humanURL: https://www.adionics.com/wp-json/
+  baseURL: https://www.adionics.com/wp-json
+  tags:
+  - Posts
+  - Content
+  properties:
+  - type: OpenAPI
+    url: openapi/adionics-posts-api-openapi.yml
+  - type: Overlay
+    url: overlays/adionics-posts-api-overlay.yaml
+  - type: Authentication
+    url: authentication/adionics-authentication.yml
+  - type: ErrorCatalog
+    url: errors/adionics-problem-types.yml
+  - type: Conventions
+    url: conventions/adionics-conventions.yml
+  - type: DataModel
+    url: data-model/adionics-data-model.yml
+  - type: Conformance
+    url: conformance/adionics-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/adionics-lifecycle.yml
+- aid: adionics:adionics-pages-api
+  name: Adionics Pages API
+  description: >-
+    Public, unauthenticated read access to the static pages of adionics.com — Our Technology, Our Offer,
+    Markets, Applications, Expertise, Adionics' History, Management Team, Careers, Contact and the legal
+    pages — in both the English and Spanish trees. Verified live at 29 published pages on 2026-09-07.
+  humanURL: https://www.adionics.com/wp-json/
+  baseURL: https://www.adionics.com/wp-json
+  tags:
+  - Pages
+  - Content
+  properties:
+  - type: OpenAPI
+    url: openapi/adionics-pages-api-openapi.yml
+  - type: Overlay
+    url: overlays/adionics-pages-api-overlay.yaml
+  - type: Authentication
+    url: authentication/adionics-authentication.yml
+  - type: ErrorCatalog
+    url: errors/adionics-problem-types.yml
+  - type: Conventions
+    url: conventions/adionics-conventions.yml
+  - type: DataModel
+    url: data-model/adionics-data-model.yml
+  - type: Conformance
+    url: conformance/adionics-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/adionics-lifecycle.yml
+- aid: adionics:adionics-media-api
+  name: Adionics Media API
+  description: >-
+    Public, unauthenticated read access to the adionics.com media library — pilot and plant photography,
+    process diagrams, downloadable brochures and press assets, each with its generated size variants and
+    source URL. Verified live at 551 attachments on 2026-09-07.
+  humanURL: https://www.adionics.com/wp-json/
+  baseURL: https://www.adionics.com/wp-json
+  tags:
+  - Media
+  - Content
+  properties:
+  - type: OpenAPI
+    url: openapi/adionics-media-api-openapi.yml
+  - type: Overlay
+    url: overlays/adionics-media-api-overlay.yaml
+  - type: Authentication
+    url: authentication/adionics-authentication.yml
+  - type: ErrorCatalog
+    url: errors/adionics-problem-types.yml
+  - type: Conventions
+    url: conventions/adionics-conventions.yml
+  - type: DataModel
+    url: data-model/adionics-data-model.yml
+  - type: Conformance
+    url: conformance/adionics-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/adionics-lifecycle.yml
+- aid: adionics:adionics-taxonomy-api
+  name: Adionics Taxonomy API
+  description: >-
+    Public, unauthenticated read access to the classification terms behind adionics.com — the four post
+    categories used across the English and Spanish news trees, the registered (and currently unused) post
+    tag vocabulary, and the taxonomy registry itself.
+  humanURL: https://www.adionics.com/wp-json/
+  baseURL: https://www.adionics.com/wp-json
+  tags:
+  - Categories
+  - Tags
+  - Taxonomy
+  properties:
+  - type: OpenAPI
+    url: openapi/adionics-taxonomy-api-openapi.yml
+  - type: Overlay
+    url: overlays/adionics-taxonomy-api-overlay.yaml
+  - type: Authentication
+    url: authentication/adionics-authentication.yml
+  - type: ErrorCatalog
+    url: errors/adionics-problem-types.yml
+  - type: Conventions
+    url: conventions/adionics-conventions.yml
+  - type: DataModel
+    url: data-model/adionics-data-model.yml
+  - type: Conformance
+    url: conformance/adionics-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/adionics-lifecycle.yml
+- aid: adionics:adionics-search-api
+  name: Adionics Search API
+  description: >-
+    Public, unauthenticated cross-content search over adionics.com — posts and pages together — returning
+    lightweight id / title / url / type / subtype records. Verified live at 267 searchable objects on
+    2026-09-07.
+  humanURL: https://www.adionics.com/wp-json/
+  baseURL: https://www.adionics.com/wp-json
+  tags:
+  - Search
+  - Content
+  properties:
+  - type: OpenAPI
+    url: openapi/adionics-search-api-openapi.yml
+  - type: Overlay
+    url: overlays/adionics-search-api-overlay.yaml
+  - type: Authentication
+    url: authentication/adionics-authentication.yml
+  - type: ErrorCatalog
+    url: errors/adionics-problem-types.yml
+  - type: Conventions
+    url: conventions/adionics-conventions.yml
+  - type: Conformance
+    url: conformance/adionics-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/adionics-lifecycle.yml
+- aid: adionics:adionics-discovery-api
+  name: Adionics Discovery API
+  description: >-
+    Public, unauthenticated discovery metadata for adionics.com — the self-describing REST route index
+    (370 routes across 23 namespaces at capture), the registered content types and publication statuses,
+    the public author records, the Polylang language registry covering the English and Spanish sites, and
+    the oEmbed 1.0 provider endpoint. This is the surface that makes the rest of the API machine-readable
+    in the absence of any published documentation.
+  humanURL: https://www.adionics.com/wp-json/
+  baseURL: https://www.adionics.com/wp-json
+  tags:
+  - Discovery
+  - Metadata
+  - oEmbed
+  properties:
+  - type: OpenAPI
+    url: openapi/adionics-discovery-api-openapi.yml
+  - type: Overlay
+    url: overlays/adionics-discovery-api-overlay.yaml
+  - type: Authentication
+    url: authentication/adionics-authentication.yml
+  - type: ErrorCatalog
+    url: errors/adionics-problem-types.yml
+  - type: Conventions
+    url: conventions/adionics-conventions.yml
+  - type: Conformance
+    url: conformance/adionics-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/adionics-lifecycle.yml
+- aid: adionics:adionics-mcp-server
+  name: Adionics MCP Server
+  description: >-
+    A live Model Context Protocol endpoint registered on the adionics.com WordPress install by the
+    WordPress MCP Adapter, at https://www.adionics.com/wp-json/mcp/mcp-adapter-default-server. The route
+    is served (the mcp namespace and both routes are listed in the public REST index) but every JSON-RPC
+    call is authentication-gated: initialize and tools/list both return HTTP 401 rest_forbidden to an
+    anonymous client, so the live tool schemas could not be enumerated. This is CMS-plugin infrastructure
+    rather than a purpose-built Adionics product MCP server.
+  humanURL: https://www.adionics.com/wp-json/mcp
+  baseURL: https://www.adionics.com/wp-json/mcp/mcp-adapter-default-server
+  tags:
+  - MCP
+  - Agents
+  properties:
+  - type: MCPServer
+    url: mcp/adionics-mcp.yml
+  - type: ToolCrosswalk
+    url: mcp/adionics-tool-crosswalk.yml
+  - type: Authentication
+    url: authentication/adionics-authentication.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: DomainSecurity
+  url: security/adionics-domain-security.yml
 - type: Website
-  url: https://equityzen.com/company/adionics
+  url: https://www.adionics.com/
+- type: About
+  url: https://www.adionics.com/in-few-words/
+- type: Blog
+  url: https://www.adionics.com/news/
+- type: BlogRSS
+  url: https://www.adionics.com/feed/
+- type: Contact
+  url: https://www.adionics.com/contact/
+- type: Careers
+  url: https://www.adionics.com/in-few-words/careers/
+- type: Products
+  url: https://www.adionics.com/our-offer/
+- type: Technology
+  url: https://www.adionics.com/our-technology/
+- type: TermsOfService
+  url: https://www.adionics.com/credits-terms-conditions/
+- type: PrivacyPolicy
+  url: https://www.adionics.com/politique-de-confidentialite/
+- type: LinkedIn
+  url: https://www.linkedin.com/company/adionics/
+- type: Twitter
+  url: https://twitter.com/Adionics
+- type: Authentication
+  url: authentication/adionics-authentication.yml
+- type: ErrorCatalog
+  url: errors/adionics-problem-types.yml
+- type: Conventions
+  url: conventions/adionics-conventions.yml
+- type: DataModel
+  url: data-model/adionics-data-model.yml
+- type: Conformance
+  url: conformance/adionics-conformance.yml
+- type: Lifecycle
+  url: lifecycle/adionics-lifecycle.yml
+- type: RateLimits
+  url: rate-limits/adionics-rate-limits.yml
+- type: Plans
+  url: plans/adionics-plans-pricing.yml
+- type: Packages
+  url: packages/adionics-packages.yml
+- type: LLMsTxt
+  url: llms/adionics-llms.txt
+- type: MCPServer
+  url: mcp/adionics-mcp.yml
+- type: ToolCrosswalk
+  url: mcp/adionics-tool-crosswalk.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Examples
+  url: examples/adionics-examples.yml
+x-enrichment:
+  date: '2026-09-07'
+  status: enriched
+  artifacts_added: 30
+  pass: local-v3

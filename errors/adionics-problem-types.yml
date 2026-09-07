@@ -1,0 +1,58 @@
+generated: '2026-09-07'
+method: derived
+source: >-
+  Derived from the OpenAPI documents in openapi/ (themselves derived from the live WordPress REST
+  route index) and from error bodies observed on www.adionics.com on 2026-09-07.
+format: wordpress-rest-error
+rfc9457: false
+note: >-
+  Adionics publishes no error reference. The WordPress REST API does not emit
+  application/problem+json; it returns application/json with a `code` / `message` / `data.status`
+  envelope. Every entry below was observed live or is declared in the derived specs.
+envelope:
+  content_type: application/json
+  fields:
+    code: Machine-readable error slug, e.g. rest_forbidden, rest_post_invalid_id, rest_invalid_param.
+    message: Human-readable message. Localised to French on this install even for English content.
+    data.status: The HTTP status, repeated inside the body.
+    data.params: Present on rest_invalid_param — a map of the offending parameter to its message.
+problems:
+- status: 400
+  code: rest_invalid_param
+  title: Invalid parameter
+  remediation: >-
+    Check the parameter against the derived spec — per_page is capped at 100, context may only be
+    view or embed for anonymous callers, and page may not exceed X-WP-TotalPages.
+  source_operation: openapi/adionics-posts-api-openapi.yml#listPosts
+- status: 401
+  code: rest_forbidden
+  title: Not allowed
+  observed: true
+  observed_at:
+  - https://www.adionics.com/wp-json/wp/v2/settings
+  - https://www.adionics.com/wp-json/wp-abilities/v1/abilities
+  - https://www.adionics.com/wp-json/mcp/mcp-adapter-default-server
+  remediation: >-
+    The route or field requires an authenticated WordPress user. There is no self-service path to
+    one; credentials are WordPress Application Passwords issued from wp-admin.
+- status: 401
+  code: rest_cannot_view_plugins
+  title: Cannot view plugins
+  observed: true
+  observed_at:
+  - https://www.adionics.com/wp-json/wp/v2/plugins
+- status: 401
+  code: rest_cannot_view_themes
+  title: Cannot view themes
+  observed: true
+  observed_at:
+  - https://www.adionics.com/wp-json/wp/v2/themes
+- status: 404
+  code: rest_post_invalid_id
+  title: Invalid post ID
+  remediation: The id does not exist or the object is not published.
+  source_operation: openapi/adionics-posts-api-openapi.yml#getPost
+- status: 404
+  code: rest_no_route
+  title: No route was found matching the URL and request method
+  remediation: Re-read the route index at https://www.adionics.com/wp-json/ — 370 routes are listed there.

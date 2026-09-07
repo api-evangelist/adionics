@@ -64,5 +64,40 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Adionics is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://equityzen.com/company/adionics
+Adionics is a French cleantech company founded in 2012 in Paris by Guillaume de Souza, out of
+research into liquid-liquid salt extraction begun in 2007. It develops and licenses a patented
+Direct Lithium Extraction (DLE) process built on **Flionex** — a proprietary, thermally regenerated,
+highly selective liquid salt absorbent that captures lithium salts from brine at ambient temperature
+and releases them at higher temperature in a closed loop, with no traditional reagents and more than
+90% less water than evaporation ponds. Adionics sells a four-stage engagement to mining operators
+(modeling study, lab-scale bench test, on-site pilot plant, then basic engineering and commissioning
+support for a commercial plant), targeting lithium-rich salars, geothermal brines, oil-and-gas
+produced water, industrial effluents and battery recycling streams.
+
+## API surface
+
+**Adionics is a process-technology and engineering company, not a software vendor.** It publishes no
+developer portal, no API documentation, no OpenAPI, no SDKs, no CLI and no public GitHub
+organization, and it sells no API product. There is no lithium, brine, assay, plant or project data
+available through any interface.
+
+What this profile captures is the one machine-readable surface the company does serve: the
+**WordPress REST content API** behind `www.adionics.com`, which is anonymously readable and
+read-only for the public. Verified live on 2026-09-07: 228 news posts, 29 static pages across the
+English and Spanish trees, 551 media attachments, 4 categories, 267 searchable objects, and a
+self-describing route index listing 370 routes across 23 namespaces. The six OpenAPI documents in
+`openapi/` were **derived by API Evangelist** from that route index and from live anonymous
+responses — Adionics publishes none of them itself.
+
+The install also registers a live **Model Context Protocol endpoint** at
+`/wp-json/mcp/mcp-adapter-default-server` (WordPress MCP Adapter plugin, alongside the WordPress
+Abilities API). The route is served, but `initialize` and `tools/list` both return HTTP 401
+`rest_forbidden` to an anonymous client, so the tool set is auth-gated and was not enumerated. No
+tools are asserted here.
+
+No `/.well-known/` document of any kind is served, no A2A agent card exists, and no security.txt,
+trust centre, status page, changelog, sandbox, webhook or event surface was found. Those absences
+are recorded in the artifacts rather than left blank.
+
+- <https://www.adionics.com/>
+- <https://www.adionics.com/wp-json/>

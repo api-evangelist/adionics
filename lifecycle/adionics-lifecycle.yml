@@ -1,0 +1,36 @@
+generated: '2026-09-07'
+method: derived
+source: >-
+  Derived from the live route index at https://www.adionics.com/wp-json/ and from a search of
+  adionics.com for versioning, deprecation, SLA and status pages on 2026-09-07 (none found).
+versioning:
+  scheme: uri-path-namespace
+  current: wp/v2
+  namespaces_at_capture: 23
+  docs: null
+  detail: >-
+    Versions are WordPress core's and its plugins', not Adionics'. Adionics publishes no versioning
+    policy of its own, and no statement about how or whether this surface will be kept stable.
+deprecation:
+  policy_url: null
+  sunset_header: false
+  deprecation_header: false
+  detail: >-
+    No deprecation policy, no RFC 8594 Sunset or Deprecation headers observed, and no advance-notice
+    commitment. Because the surface is a side effect of the corporate website's CMS rather than a
+    product, a plugin change or a theme migration could remove routes without any notice at all.
+    Consumers should treat every route as unversioned and volatile.
+sla:
+  url: null
+  uptime_target: null
+status_page: null
+status_page_detail: >-
+  No status.adionics.com and no status page anywhere on the site. Nothing to point a StatusPage
+  type at, so none is emitted.
+deprecated_operations: []
+observed_activity:
+  most_recent_post: '2026-07-30'
+  most_recent_post_title: FastMarket Las Vegas 2026
+  detail: >-
+    The newsroom is actively maintained — the most recent post at capture was 2026-07-30 — which is
+    evidence the site (and therefore the surface) is live, not that the API is managed.

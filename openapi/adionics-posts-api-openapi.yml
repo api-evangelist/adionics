@@ -1,0 +1,306 @@
+openapi: 3.1.0
+info:
+  title: Adionics Posts API
+  version: wp/v2
+  description: Public, unauthenticated read access to the Adionics news and press archive — 228 published posts
+    at capture (2026-09-07) — served by the WordPress core REST API behind www.adionics.com.
+  contact:
+    name: Adionics
+    url: https://www.adionics.com/contact/
+  x-api-evangelist:
+    generated: '2026-09-07'
+    method: derived
+    source: https://www.adionics.com/wp-json/ (live WordPress REST route index, fetched 2026-09-07)
+    note: Derived from the self-describing WordPress REST route index published at https://www.adionics.com/wp-json/
+      and from live anonymous responses observed on 2026-09-07. Adionics publishes no OpenAPI of its own; every
+      path, method, parameter and response field below was observed on the live surface, none were invented.
+servers:
+- url: https://www.adionics.com/wp-json
+  description: Adionics WordPress REST API root
+tags:
+- name: Posts
+paths:
+  /wp/v2/posts:
+    get:
+      operationId: listPosts
+      summary: List published posts
+      description: 'Returns a paginated collection of published Adionics news posts. Anonymous access verified 2026-09-07
+        (HTTP 200, X-WP-Total: 228).'
+      tags:
+      - Posts
+      parameters:
+      - name: context
+        in: query
+        description: Scope of the response. Anonymous callers may only use `view` or `embed`; `edit` returns 401.
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          default: view
+      - name: page
+        in: query
+        description: Current page of the collection (1-based).
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+      - name: per_page
+        in: query
+        description: Maximum number of items returned per page.
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+          maximum: 100
+      - name: search
+        in: query
+        description: Limit results to those matching a string.
+        schema:
+          type: string
+      - name: order
+        in: query
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: desc
+      - name: _fields
+        in: query
+        description: Comma-separated list of fields to return (sparse fieldsets).
+        schema:
+          type: string
+      - name: _embed
+        in: query
+        description: Embed linked resources (author, featured media, terms) into the `_embedded` member.
+        schema:
+          type: string
+      - name: categories
+        in: query
+        description: Limit to posts assigned to the given category term ids.
+        schema:
+          type: array
+          items:
+            type: integer
+      - name: slug
+        in: query
+        schema:
+          type: array
+          items:
+            type: string
+      - name: after
+        in: query
+        description: ISO 8601 date; return posts published after it.
+        schema:
+          type: string
+          format: date-time
+      - name: before
+        in: query
+        schema:
+          type: string
+          format: date-time
+      - name: orderby
+        in: query
+        schema:
+          type: string
+          enum:
+          - date
+          - id
+          - title
+          - slug
+          - modified
+          - relevance
+          default: date
+      responses:
+        '200':
+          description: A page of posts.
+          headers:
+            X-WP-Total:
+              description: Total number of items in the collection.
+              schema:
+                type: integer
+            X-WP-TotalPages:
+              description: Total number of pages available.
+              schema:
+                type: integer
+            Link:
+              description: RFC 8288 pagination links (`rel="next"` / `rel="prev"`).
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /wp/v2/posts/{id}:
+    get:
+      operationId: getPost
+      summary: Retrieve a single post
+      tags:
+      - Posts
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: context
+        in: query
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          default: view
+      - name: _fields
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The post.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    WPError:
+      type: object
+      description: The WordPress REST API error envelope. Not RFC 9457 problem+json.
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        data:
+          type: object
+          properties:
+            status:
+              type: integer
+      required:
+      - code
+      - message
+      - data
+    Post:
+      type: object
+      description: A published Adionics news post.
+      properties:
+        id:
+          type: integer
+        date:
+          type: string
+          format: date-time
+        date_gmt:
+          type: string
+          format: date-time
+        guid:
+          type: object
+          properties: &id001
+            rendered:
+              type: string
+        modified:
+          type: string
+          format: date-time
+        modified_gmt:
+          type: string
+          format: date-time
+        slug:
+          type: string
+        status:
+          type: string
+        type:
+          type: string
+        link:
+          type: string
+          format: uri
+        title:
+          type: object
+          properties: *id001
+        content:
+          type: object
+          properties: *id001
+        excerpt:
+          type: object
+          properties: *id001
+        author:
+          type: integer
+          description: Author user id — resolvable via /wp/v2/users/{id}.
+        featured_media:
+          type: integer
+          description: Attachment id — resolvable via /wp/v2/media/{id}.
+        comment_status:
+          type: string
+        ping_status:
+          type: string
+        sticky:
+          type: boolean
+        template:
+          type: string
+        format:
+          type: string
+        meta:
+          type: object
+        categories:
+          type: array
+          items:
+            type: integer
+          description: Category term ids — resolvable via /wp/v2/categories/{id}.
+        tags:
+          type: array
+          items:
+            type: integer
+        class_list:
+          type: array
+          items:
+            type: string
+        acf:
+          type: object
+          description: Advanced Custom Fields payload exposed on this install.
+        blocksy_meta:
+          type: object
+          description: Theme (Blocksy) presentation metadata.
+        _links:
+          type: object
+          description: HAL-style link relations.
+  responses:
+    NotFound:
+      description: The requested object does not exist, or is not publicly readable.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WPError'
+          example:
+            code: rest_post_invalid_id
+            message: Invalid post ID.
+            data:
+              status: 404
+    Forbidden:
+      description: The requested route or field requires an authenticated WordPress user. Returned anonymously as
+        HTTP 401 with code `rest_forbidden`.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WPError'
+          example:
+            code: rest_forbidden
+            message: Sorry, you are not allowed to do that.
+            data:
+              status: 401
+    BadRequest:
+      description: An invalid parameter was supplied.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WPError'
+          example:
+            code: rest_invalid_param
+            message: 'Invalid parameter(s): per_page'
+            data:
+              status: 400

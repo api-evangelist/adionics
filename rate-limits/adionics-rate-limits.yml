@@ -1,0 +1,26 @@
+generated: '2026-09-07'
+method: probed
+source: >-
+  Live response headers observed on https://www.adionics.com/wp-json/wp/v2/posts?per_page=1 and
+  sibling collection routes, 2026-09-07, plus a search of adionics.com for a published rate-limit
+  policy (none found).
+limit_count: 0
+limits: []
+response_headers: []
+retry_after: false
+exhaustion_status: null
+detail: >-
+  Adionics documents no rate limits, and none are signalled at runtime. No RateLimit-*,
+  X-RateLimit-* or Retry-After header appeared on any 200 response. The only throttling signal
+  published anywhere on the host is robots.txt, which sets `Crawl-delay: 10` for all user agents —
+  a crawler directive, not an API limit, and not enforced. The origin is Apache with no visible
+  gateway. Absence of a documented limit is not permission to hammer the host: a courteous client
+  should honour the 10-second crawl delay and keep per_page at the 100-item maximum to minimise
+  requests.
+observed_controls:
+- control: per_page maximum
+  value: 100
+  detail: Requests above 100 return 400 rest_invalid_param, which caps page size but not request rate.
+- control: robots.txt Crawl-delay
+  value: 10
+  source: https://www.adionics.com/robots.txt

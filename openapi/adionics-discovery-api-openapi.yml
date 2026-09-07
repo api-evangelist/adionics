@@ -1,0 +1,424 @@
+openapi: 3.1.0
+info:
+  title: Adionics Discovery API
+  version: wp/v2
+  description: Public, unauthenticated discovery metadata for adionics.com — the self-describing route index (370
+    routes across 23 namespaces at capture), the registered content types, publication statuses, public author records,
+    the Polylang language registry (English and Spanish), and the oEmbed provider endpoint. This is the surface
+    that makes the rest of the API machine-readable in the absence of any published documentation.
+  contact:
+    name: Adionics
+    url: https://www.adionics.com/contact/
+  x-api-evangelist:
+    generated: '2026-09-07'
+    method: derived
+    source: https://www.adionics.com/wp-json/ (live WordPress REST route index, fetched 2026-09-07)
+    note: Derived from the self-describing WordPress REST route index published at https://www.adionics.com/wp-json/
+      and from live anonymous responses observed on 2026-09-07. Adionics publishes no OpenAPI of its own; every
+      path, method, parameter and response field below was observed on the live surface, none were invented.
+servers:
+- url: https://www.adionics.com/wp-json
+  description: Adionics WordPress REST API root
+tags:
+- name: Discovery
+paths:
+  /:
+    get:
+      operationId: getRouteIndex
+      summary: Retrieve the REST route index
+      description: Anonymous access verified 2026-09-07 (HTTP 200; 370 routes, 23 namespaces).
+      tags:
+      - Discovery
+      parameters:
+      - name: namespace
+        in: query
+        description: Restrict the index to a single namespace (e.g. `wp/v2`, `pll/v1`, `mcp`).
+        schema:
+          type: string
+      - name: context
+        in: query
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          default: view
+      responses:
+        '200':
+          description: The route index.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RouteIndex'
+  /wp/v2/types:
+    get:
+      operationId: listTypes
+      summary: List registered content types
+      tags:
+      - Discovery
+      parameters: []
+      responses:
+        '200':
+          description: The post-type registry.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TypeRegistry'
+  /wp/v2/statuses:
+    get:
+      operationId: listStatuses
+      summary: List publication statuses
+      tags:
+      - Discovery
+      parameters: []
+      responses:
+        '200':
+          description: The status registry.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusRegistry'
+  /wp/v2/users:
+    get:
+      operationId: listUsers
+      summary: List public author records
+      description: 'Anonymous access verified 2026-09-07 (HTTP 200, X-WP-Total: 3).'
+      tags:
+      - Discovery
+      parameters:
+      - name: context
+        in: query
+        description: Scope of the response. Anonymous callers may only use `view` or `embed`; `edit` returns 401.
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          default: view
+      - name: page
+        in: query
+        description: Current page of the collection (1-based).
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+      - name: per_page
+        in: query
+        description: Maximum number of items returned per page.
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+          maximum: 100
+      - name: search
+        in: query
+        description: Limit results to those matching a string.
+        schema:
+          type: string
+      - name: order
+        in: query
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: desc
+      - name: _fields
+        in: query
+        description: Comma-separated list of fields to return (sparse fieldsets).
+        schema:
+          type: string
+      - name: _embed
+        in: query
+        description: Embed linked resources (author, featured media, terms) into the `_embedded` member.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A page of author records.
+          headers:
+            X-WP-Total:
+              description: Total number of items in the collection.
+              schema:
+                type: integer
+            X-WP-TotalPages:
+              description: Total number of pages available.
+              schema:
+                type: integer
+            Link:
+              description: RFC 8288 pagination links (`rel="next"` / `rel="prev"`).
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+  /wp/v2/users/{id}:
+    get:
+      operationId: getUser
+      summary: Retrieve a single author record
+      tags:
+      - Discovery
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: The author record.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /pll/v1/languages:
+    get:
+      operationId: listLanguages
+      summary: List Polylang languages
+      description: 'The multilingual registry for adionics.com. Anonymous access verified 2026-09-07 (HTTP 200):
+        English (en_GB) and Spanish (es_ES).'
+      tags:
+      - Discovery
+      parameters: []
+      responses:
+        '200':
+          description: The registered languages.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Language'
+  /oembed/1.0/embed:
+    get:
+      operationId: getOEmbed
+      summary: Retrieve oEmbed metadata for an adionics.com URL
+      description: oEmbed 1.0 provider endpoint. Anonymous access verified 2026-09-07 (HTTP 200).
+      tags:
+      - Discovery
+      parameters:
+      - name: url
+        in: query
+        required: true
+        description: The adionics.com URL to embed.
+        schema:
+          type: string
+          format: uri
+      - name: format
+        in: query
+        schema:
+          type: string
+          enum:
+          - json
+          - xml
+          default: json
+      - name: maxwidth
+        in: query
+        schema:
+          type: integer
+          default: 600
+      responses:
+        '200':
+          description: The oEmbed response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OEmbedResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    WPError:
+      type: object
+      description: The WordPress REST API error envelope. Not RFC 9457 problem+json.
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        data:
+          type: object
+          properties:
+            status:
+              type: integer
+      required:
+      - code
+      - message
+      - data
+    RouteIndex:
+      type: object
+      description: 'The WordPress REST API root document: site name, url, namespaces, the full route map, and the
+        advertised authentication mechanisms.'
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        url:
+          type: string
+          format: uri
+        home:
+          type: string
+          format: uri
+        gmt_offset:
+          type: number
+        timezone_string:
+          type: string
+        namespaces:
+          type: array
+          items:
+            type: string
+        authentication:
+          type: object
+          description: 'Advertised authentication mechanisms. On this install: WordPress Application Passwords,
+            authorized at /wp-admin/authorize-application.php.'
+        routes:
+          type: object
+          additionalProperties:
+            type: object
+        _links:
+          type: object
+    TypeRegistry:
+      type: object
+      description: Map of post-type slug to its registered definition (name, slug, rest_base, hierarchical, taxonomies).
+      additionalProperties:
+        type: object
+    StatusRegistry:
+      type: object
+      description: Map of publication-status slug to its definition.
+      additionalProperties:
+        type: object
+    User:
+      type: object
+      description: A public author record.
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        url:
+          type: string
+        description:
+          type: string
+        link:
+          type: string
+          format: uri
+        slug:
+          type: string
+        avatar_urls:
+          type: object
+        acf:
+          type: object
+        meta:
+          type: object
+        _links:
+          type: object
+    Language:
+      type: object
+      description: A Polylang language registered on the install.
+      properties:
+        term_id:
+          type: integer
+        name:
+          type: string
+        slug:
+          type: string
+        locale:
+          type: string
+        w3c:
+          type: string
+        flag_code:
+          type: string
+        flag_url:
+          type: string
+          format: uri
+        home_url:
+          type: string
+          format: uri
+        search_url:
+          type: string
+          format: uri
+        is_rtl:
+          type: boolean
+        is_default:
+          type: boolean
+        active:
+          type: boolean
+        page_on_front:
+          type:
+          - integer
+          - 'null'
+        page_for_posts:
+          type:
+          - integer
+          - 'null'
+        fallbacks:
+          type: array
+          items:
+            type: string
+    OEmbedResponse:
+      type: object
+      description: oEmbed 1.0 rich response for an adionics.com URL.
+      properties:
+        version:
+          type: string
+        provider_name:
+          type: string
+        provider_url:
+          type: string
+          format: uri
+        author_name:
+          type: string
+        author_url:
+          type: string
+          format: uri
+        title:
+          type: string
+        type:
+          type: string
+        width:
+          type: integer
+        height:
+          type: integer
+        html:
+          type: string
+  responses:
+    NotFound:
+      description: The requested object does not exist, or is not publicly readable.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WPError'
+          example:
+            code: rest_post_invalid_id
+            message: Invalid post ID.
+            data:
+              status: 404
+    Forbidden:
+      description: The requested route or field requires an authenticated WordPress user. Returned anonymously as
+        HTTP 401 with code `rest_forbidden`.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WPError'
+          example:
+            code: rest_forbidden
+            message: Sorry, you are not allowed to do that.
+            data:
+              status: 401
+    BadRequest:
+      description: An invalid parameter was supplied.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WPError'
+          example:
+            code: rest_invalid_param
+            message: 'Invalid parameter(s): per_page'
+            data:
+              status: 400

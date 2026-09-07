@@ -1,0 +1,30 @@
+generated: '2026-09-07'
+method: searched
+source: >-
+  Searched npm (registry.npmjs.org search for "adionics" — 0 results), PyPI
+  (pypi.org/pypi/adionics/json — 404), the GitHub organization api (api.github.com/orgs/adionics —
+  404) and GitHub code search (0 repositories), plus the adionics.com site for any SDK or download
+  link. 2026-09-07.
+package_count: 0
+packages: []
+detail: >-
+  Adionics publishes no client libraries, no SDKs and no CLI in any registry, and operates no
+  public GitHub organization. This is an honest zero, not an unchecked field: every registry named
+  above answered, and each answered empty. No SDKs pointer is emitted.
+registries_checked:
+- registry: npm
+  query: https://registry.npmjs.org/-/v1/search?text=adionics
+  status: 200
+  results: 0
+- registry: pypi
+  query: https://pypi.org/pypi/adionics/json
+  status: 404
+  results: 0
+- registry: github-org
+  query: https://api.github.com/orgs/adionics
+  status: 404
+  results: 0
+- registry: github-search
+  query: https://api.github.com/search/repositories?q=adionics
+  status: 200
+  results: 0

@@ -1,0 +1,20 @@
+generated: '2026-09-07'
+method: searched
+source: https://www.adionics.com/our-offer/
+plan_count: 0
+plans: []
+detail: >-
+  Adionics publishes no pricing of any kind — not for the API, and not for its actual business. Its
+  commercial offer, described at https://www.adionics.com/our-offer/, is a four-stage engineering
+  engagement sold to mining operators: a proprietary modeling study, a lab-scale bench test (about
+  1 t/yr LiCl equivalent), an on-site pilot plant, and basic engineering plus commissioning support
+  for a commercial plant. Every stage is quoted per project through a sales conversation; there is
+  no published price, no rate card, no tiers and no self-service signup. The content API described
+  in this repo is free, anonymous and unmetered as a side effect of the corporate website being
+  public, and is not a product Adionics sells.
+api_access:
+  price: 0
+  currency: null
+  metered: false
+  signup_required: false
+  note: Public read access requires no account. There is no paid tier because there is no product.

@@ -1,0 +1,279 @@
+openapi: 3.1.0
+info:
+  title: Adionics Taxonomy API
+  version: wp/v2
+  description: Public, unauthenticated read access to the classification terms behind adionics.com — 4 post categories
+    and the (currently empty) post tag vocabulary — plus the taxonomy registry itself.
+  contact:
+    name: Adionics
+    url: https://www.adionics.com/contact/
+  x-api-evangelist:
+    generated: '2026-09-07'
+    method: derived
+    source: https://www.adionics.com/wp-json/ (live WordPress REST route index, fetched 2026-09-07)
+    note: Derived from the self-describing WordPress REST route index published at https://www.adionics.com/wp-json/
+      and from live anonymous responses observed on 2026-09-07. Adionics publishes no OpenAPI of its own; every
+      path, method, parameter and response field below was observed on the live surface, none were invented.
+servers:
+- url: https://www.adionics.com/wp-json
+  description: Adionics WordPress REST API root
+tags:
+- name: Taxonomy
+paths:
+  /wp/v2/categories:
+    get:
+      operationId: listCategories
+      summary: List post categories
+      description: 'Anonymous access verified 2026-09-07 (HTTP 200, X-WP-Total: 4).'
+      tags:
+      - Taxonomy
+      parameters:
+      - &id001
+        name: context
+        in: query
+        description: Scope of the response. Anonymous callers may only use `view` or `embed`; `edit` returns 401.
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          default: view
+      - &id002
+        name: page
+        in: query
+        description: Current page of the collection (1-based).
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+      - &id003
+        name: per_page
+        in: query
+        description: Maximum number of items returned per page.
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+          maximum: 100
+      - &id004
+        name: search
+        in: query
+        description: Limit results to those matching a string.
+        schema:
+          type: string
+      - &id005
+        name: order
+        in: query
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: desc
+      - &id006
+        name: _fields
+        in: query
+        description: Comma-separated list of fields to return (sparse fieldsets).
+        schema:
+          type: string
+      - &id007
+        name: _embed
+        in: query
+        description: Embed linked resources (author, featured media, terms) into the `_embedded` member.
+        schema:
+          type: string
+      - name: post
+        in: query
+        description: Limit to terms assigned to a specific post.
+        schema:
+          type: integer
+      - name: hide_empty
+        in: query
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: A page of category terms.
+          headers:
+            X-WP-Total:
+              description: Total number of items in the collection.
+              schema:
+                type: integer
+            X-WP-TotalPages:
+              description: Total number of pages available.
+              schema:
+                type: integer
+            Link:
+              description: RFC 8288 pagination links (`rel="next"` / `rel="prev"`).
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Term'
+  /wp/v2/categories/{id}:
+    get:
+      operationId: getCategory
+      summary: Retrieve a single category
+      tags:
+      - Taxonomy
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: The category term.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Term'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /wp/v2/tags:
+    get:
+      operationId: listTags
+      summary: List post tags
+      description: 'Anonymous access verified 2026-09-07 (HTTP 200, X-WP-Total: 0 — the tag vocabulary is registered
+        but unused on this install).'
+      tags:
+      - Taxonomy
+      parameters:
+      - *id001
+      - *id002
+      - *id003
+      - *id004
+      - *id005
+      - *id006
+      - *id007
+      responses:
+        '200':
+          description: A page of tag terms.
+          headers:
+            X-WP-Total:
+              description: Total number of items in the collection.
+              schema:
+                type: integer
+            X-WP-TotalPages:
+              description: Total number of pages available.
+              schema:
+                type: integer
+            Link:
+              description: RFC 8288 pagination links (`rel="next"` / `rel="prev"`).
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Term'
+  /wp/v2/taxonomies:
+    get:
+      operationId: listTaxonomies
+      summary: List registered taxonomies
+      tags:
+      - Taxonomy
+      parameters:
+      - name: type
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The taxonomy registry.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaxonomyRegistry'
+components:
+  schemas:
+    WPError:
+      type: object
+      description: The WordPress REST API error envelope. Not RFC 9457 problem+json.
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        data:
+          type: object
+          properties:
+            status:
+              type: integer
+      required:
+      - code
+      - message
+      - data
+    Term:
+      type: object
+      properties:
+        id:
+          type: integer
+        count:
+          type: integer
+        description:
+          type: string
+        link:
+          type: string
+          format: uri
+        name:
+          type: string
+        slug:
+          type: string
+        taxonomy:
+          type: string
+        parent:
+          type: integer
+          description: Parent term id (categories are hierarchical; tags are not).
+        acf:
+          type: object
+        meta:
+          type: object
+        _links:
+          type: object
+    TaxonomyRegistry:
+      type: object
+      description: Map of taxonomy slug to its registered definition (name, slug, types, rest_base, hierarchical).
+      additionalProperties:
+        type: object
+  responses:
+    NotFound:
+      description: The requested object does not exist, or is not publicly readable.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WPError'
+          example:
+            code: rest_post_invalid_id
+            message: Invalid post ID.
+            data:
+              status: 404
+    Forbidden:
+      description: The requested route or field requires an authenticated WordPress user. Returned anonymously as
+        HTTP 401 with code `rest_forbidden`.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WPError'
+          example:
+            code: rest_forbidden
+            message: Sorry, you are not allowed to do that.
+            data:
+              status: 401
+    BadRequest:
+      description: An invalid parameter was supplied.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WPError'
+          example:
+            code: rest_invalid_param
+            message: 'Invalid parameter(s): per_page'
+            data:
+              status: 400

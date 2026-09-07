@@ -1,0 +1,121 @@
+generated: '2026-09-07'
+method: probed
+source: Direct HTTPS probes of each named path on each host, 2026-09-07.
+hit_count: 0
+path_echo_control: passed
+soft_404_control:
+  path: /.well-known/adionics-negative-control-7f3ab91c.json
+  status: 404
+  detail: >-
+    The negative-control path that cannot exist returned 404 on www.adionics.com, so this host does
+    not echo paths back as documents and does not answer 200 for arbitrary /.well-known/* requests.
+    Every miss below is therefore a real miss.
+detail: >-
+  Adionics serves no /.well-known/ discovery surface at all. The site is a WordPress install behind
+  Apache; every named path returns the themed 404 page (an HTML body, roughly 34 KB) with an
+  honest 404 status. The apex adionics.com 301s to www for every path, so it publishes nothing
+  independently. No WellKnown and no SecurityTxt pointer is emitted — this file records an absence,
+  and an absence must not be advertised as a presence.
+hosts:
+- host: https://www.adionics.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog.json
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/ucp.json
+    status: 404
+    file: null
+  - path: /.well-known/acp.json
+    status: 404
+    file: null
+  - path: /.well-known/aauth-resource.json
+    status: 404
+    file: null
+  - path: /.well-known/apis.json
+    status: 404
+    file: null
+  - path: /apis.json
+    status: 404
+    file: null
+  - path: /apis.yml
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+  - path: /llms.txt
+    status: 404
+    file: null
+- host: https://adionics.com
+  note: Apex redirects to www with HTTP 301 for every path probed; it serves no document of its own.
+  documents:
+  - path: /.well-known/security.txt
+    status: 301
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 301
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 301
+    file: null
+  - path: /.well-known/oauth-protected-resource
+    status: 301
+    file: null
+  - path: /.well-known/api-catalog
+    status: 301
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 301
+    file: null
+  - path: /.well-known/ucp.json
+    status: 301
+    file: null
+  - path: /.well-known/acp.json
+    status: 301
+    file: null
+  - path: /.well-known/aauth-resource.json
+    status: 301
+    file: null
+  - path: /.well-known/apis.json
+    status: 301
+    file: null
+  - path: /apis.json
+    status: 301
+    file: null
+  - path: /apis.yml
+    status: 301
+    file: null
+served_alternatives:
+- path: /robots.txt
+  status: 200
+  detail: 'Two lines — User-agent: * and Crawl-delay: 10. No Sitemap directive, no AI-agent rules.'
+- path: /sitemap.xml
+  status: 200
+  detail: A Rank Math sitemap index naming post-sitemap1, post-sitemap2, page-sitemap and category-sitemap.
+- path: /wp-json/
+  status: 200
+  detail: >-
+    The real discovery document on this host. The WordPress REST route index is self-describing and
+    lists 370 routes across 23 namespaces — it is what the openapi/ specs in this repo were derived
+    from.

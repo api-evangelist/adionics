@@ -1,0 +1,48 @@
+generated: '2026-09-07'
+method: derived
+source: >-
+  Derived from mcp/adionics-mcp.yml and the openapi/ documents in this repo, 2026-09-07.
+surfaces:
+  openapi:
+  - openapi/adionics-posts-api-openapi.yml
+  - openapi/adionics-pages-api-openapi.yml
+  - openapi/adionics-media-api-openapi.yml
+  - openapi/adionics-taxonomy-api-openapi.yml
+  - openapi/adionics-search-api-openapi.yml
+  - openapi/adionics-discovery-api-openapi.yml
+  graphql: null
+  mcp:
+    url: https://www.adionics.com/wp-json/mcp/mcp-adapter-default-server
+    gated: true
+    note: tools/list returns 401 rest_forbidden anonymously, so no tool name is known.
+crosswalk: []
+mcp_only: []
+rest_only:
+- capability: News and press archive
+  operations: [listPosts, getPost]
+  note: 228 published posts, anonymous.
+- capability: Static site pages
+  operations: [listPages, getPage]
+  note: 29 published pages across the English and Spanish trees.
+- capability: Media library
+  operations: [listMedia, getMediaItem]
+  note: 551 attachments with size renditions and source URLs.
+- capability: Classification
+  operations: [listCategories, getCategory, listTags, listTaxonomies]
+- capability: Search
+  operations: [search]
+  note: 267 searchable objects.
+- capability: Discovery and metadata
+  operations: [getRouteIndex, listTypes, listStatuses, listUsers, getUser, listLanguages, getOEmbed]
+coverage:
+  tools_named: 0
+  tools_bound: 0
+  mcp_only: 0
+  rest_ops_total: 18
+  rest_ops_with_tool: 0
+  note: >-
+    A crosswalk with an empty left-hand side is the honest result here, and it is worth recording
+    rather than omitting: Adionics serves a real MCP endpoint and a real REST surface, and the two
+    cannot be bound because the MCP half refuses anonymous introspection. Zero bound rows means
+    "not knowable without a credential", not "no overlap". An authenticated tools/list would be
+    enough to complete this file.

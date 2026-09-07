@@ -1,0 +1,57 @@
+generated: '2026-09-07'
+method: probed
+source: Requests actually issued against https://www.adionics.com/wp-json/ on 2026-09-07.
+note: >-
+  Every request below was executed anonymously and returned the status recorded. No credential is
+  needed for the 200s; the 401s are shown so a consumer knows where the wall is.
+examples:
+- name: Read the route index
+  operation: getRouteIndex
+  request: curl -s https://www.adionics.com/wp-json/
+  status: 200
+  result: 370 routes across 23 namespaces, plus the advertised Application Passwords authorization endpoint.
+- name: List the ten most recent news posts, titles only
+  operation: listPosts
+  request: curl -s 'https://www.adionics.com/wp-json/wp/v2/posts?per_page=10&_fields=id,date,slug,link,title'
+  status: 200
+  result: 'X-WP-Total: 228. Most recent at capture: "FastMarket Las vegas 2026", 2026-07-30.'
+- name: Fetch one post with its author, media and terms resolved in a single call
+  operation: getPost
+  request: curl -s 'https://www.adionics.com/wp-json/wp/v2/posts/742380?_embed'
+  status: 200
+- name: Search the site for lithium project announcements
+  operation: search
+  request: curl -s 'https://www.adionics.com/wp-json/wp/v2/search?search=adionics&per_page=5'
+  status: 200
+  result: 'X-WP-Total: 233.'
+- name: List every static page in both language trees
+  operation: listPages
+  request: curl -s 'https://www.adionics.com/wp-json/wp/v2/pages?per_page=100&_fields=id,slug,link,title'
+  status: 200
+  result: 'X-WP-Total: 29 — the English tree plus the Spanish /es/ tree.'
+- name: Find downloadable brochures and process diagrams
+  operation: listMedia
+  request: curl -s 'https://www.adionics.com/wp-json/wp/v2/media?per_page=100&_fields=id,title,mime_type,source_url'
+  status: 200
+  result: 'X-WP-Total: 551.'
+- name: List the site languages
+  operation: listLanguages
+  request: curl -s https://www.adionics.com/wp-json/pll/v1/languages
+  status: 200
+  result: English (en_GB) and Spanish (es_ES).
+- name: oEmbed a page
+  operation: getOEmbed
+  request: curl -s 'https://www.adionics.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.adionics.com%2F'
+  status: 200
+- name: Attempt to list MCP tools (gated)
+  request: |
+    curl -s -X POST https://www.adionics.com/wp-json/mcp/mcp-adapter-default-server \
+      -H 'Content-Type: application/json' \
+      -H 'Accept: application/json, text/event-stream' \
+      -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+  status: 401
+  result: '{"code":"rest_forbidden","data":{"status":401}} — requires a WordPress Application Password.'
+- name: Attempt to list WordPress Abilities (gated)
+  request: curl -s https://www.adionics.com/wp-json/wp-abilities/v1/abilities
+  status: 401
+  result: '{"code":"rest_forbidden","data":{"status":401}}'

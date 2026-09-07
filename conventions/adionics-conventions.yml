@@ -1,0 +1,92 @@
+generated: '2026-09-07'
+method: derived
+source: >-
+  Derived from the live WordPress REST API behind https://www.adionics.com/wp-json/ — the route
+  index, observed response headers and observed error bodies, 2026-09-07. Adionics publishes no
+  API documentation, so nothing here is quoted from the provider.
+authentication:
+  style: none-for-read
+  detail: >-
+    The public read surface is fully anonymous. The only mechanism the install advertises is
+    WordPress Application Passwords over HTTP Basic, for existing WordPress users.
+  see: authentication/adionics-authentication.yml
+idempotency:
+  supported: false
+  coverage: none
+  scope: []
+  header: null
+  detail: >-
+    There is no replay-protection contract. The anonymous surface is read-only — every route a
+    public client can reach is a safe, naturally idempotent GET — and the write half of the
+    WordPress REST API is gated behind an authenticated WordPress user, where core offers no
+    Idempotency-Key mechanism of any kind.
+reversibility:
+  grade: na
+  detail: >-
+    Not applicable. Adionics exposes no write surface to any unauthenticated or self-service
+    client, so there is no action for an agent to take and nothing to reverse. The authenticated
+    WordPress write routes (POST/PUT/PATCH/DELETE on posts, pages, media, terms) do have partial
+    undo semantics inside WordPress — a DELETE without `force=true` moves an object to trash rather
+    than destroying it, and revisions exist for posts and pages — but Adionics documents no window,
+    no policy and no restore operation, so none is asserted here.
+  write_surface: []
+  reversal_operations: []
+dry_run_mode:
+  supported: false
+  detail: No dry-run, preview or validate-only mode exists on this surface.
+pagination:
+  style: page-number
+  params:
+    page: 1-based page index
+    per_page: page size, default 10, maximum 100
+  response_headers:
+    X-WP-Total: total number of items in the collection
+    X-WP-TotalPages: total pages available at the current per_page
+    Link: RFC 8288 rel="next" / rel="prev"
+  cors_exposed: >-
+    access-control-expose-headers lists X-WP-Total, X-WP-TotalPages and Link, so a browser client
+    can read the pagination signal cross-origin.
+  observed: 'X-WP-Total: 228 on /wp/v2/posts, 551 on /wp/v2/media, 267 on /wp/v2/search'
+field_selection:
+  sparse_fieldsets:
+    param: _fields
+    detail: Comma-separated list of top-level fields to return.
+  embedding:
+    param: _embed
+    detail: >-
+      Inlines linked resources (author, featured media, terms) into an `_embedded` member, resolving
+      the id references recorded in data-model/adionics-data-model.yml in one round trip.
+  context:
+    param: context
+    values_public: [view, embed]
+    detail: context=edit returns 401 rest_forbidden to an anonymous client.
+metadata:
+  detail: >-
+    Objects carry a `meta` map, an `acf` map (Advanced Custom Fields is installed) and, on posts and
+    pages, a `blocksy_meta` map from the theme. Content fields are wrapped as {"rendered": "..."}.
+request_tracing:
+  request_id_header: null
+  detail: No request-id or correlation header is returned.
+versioning:
+  scheme: uri-path-namespace
+  current: wp/v2
+  detail: >-
+    Namespaces are versioned in the path (wp/v2, pll/v1, oembed/1.0, wp-abilities/v1, mcp). The
+    version is WordPress core's, not Adionics'. 23 namespaces were listed at capture.
+  see: lifecycle/adionics-lifecycle.yml
+error_envelope:
+  shape: '{code, message, data:{status}}'
+  problem_json: false
+  see: errors/adionics-problem-types.yml
+rate_limit_signaling:
+  headers: []
+  detail: No RateLimit-*, X-RateLimit-* or Retry-After header was observed on any 200 response.
+  see: rate-limits/adionics-rate-limits.yml
+transport:
+  https_only: true
+  hsts: 'max-age=63072000'
+  cors:
+    allow_methods: GET,POST
+    allow_headers: Content-Type, Authorization
+    note: Origin is echoed via Vary; no wildcard allow-origin was observed anonymously.
+  robots: 'REST responses carry x-robots-tag: noindex'

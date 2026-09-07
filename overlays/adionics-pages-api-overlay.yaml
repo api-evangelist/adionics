@@ -1,0 +1,34 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Adionics Pages API
+  version: 1.0.0
+extends: openapi/adionics-pages-api-openapi.yml
+x-api-evangelist:
+  generated: '2026-09-07'
+  method: generated
+  source: API Evangelist enrichment pipeline, derived from the live WordPress REST route index at https://www.adionics.com/wp-json/
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provider: adionics
+    x-apievangelist-artifact-set:
+    - authentication/adionics-authentication.yml
+    - conventions/adionics-conventions.yml
+    - errors/adionics-problem-types.yml
+    - lifecycle/adionics-lifecycle.yml
+    - rate-limits/adionics-rate-limits.yml
+    x-apievangelist-note: Adionics publishes no OpenAPI. This description was derived by API Evangelist from the
+      provider's own self-describing WordPress REST route index and from live anonymous responses; it is a third-party
+      observation, not a provider contract.
+- target: $.info
+  update:
+    x-provider-published-spec: false
+    x-contract-origin: derived-from-live-route-index
+- target: $
+  update:
+    x-agent-notes:
+      auth: No credential is required for any operation in this document.
+      write_surface: None. Every operation here is a safe GET.
+      pagination: page/per_page with X-WP-Total and X-WP-TotalPages response headers; per_page max 100.
+      rate_limits: 'Undocumented and unsignalled. Honour robots.txt Crawl-delay: 10.'
+      stability: Unversioned by the provider and volatile — a CMS plugin change can remove routes with no notice.

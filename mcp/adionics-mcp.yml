@@ -1,0 +1,49 @@
+generated: '2026-09-07'
+method: probed
+source: >-
+  https://www.adionics.com/wp-json/mcp (route index, HTTP 200) and JSON-RPC probes of
+  https://www.adionics.com/wp-json/mcp/mcp-adapter-default-server, 2026-09-07.
+status: published
+deployment:
+  mode: remote
+  endpoint: https://www.adionics.com/wp-json/mcp/mcp-adapter-default-server
+  install: null
+  package: null
+  auth: api-key
+  verified: probed
+server:
+  name: mcp-adapter-default-server
+  transport: http
+  url: https://www.adionics.com/wp-json/mcp/mcp-adapter-default-server
+  methods_advertised: [POST, GET, DELETE]
+  origin: >-
+    Registered by the WordPress MCP Adapter plugin on the adionics.com install, alongside the
+    WordPress Abilities API (wp-abilities/v1). It is CMS infrastructure that happens to be exposed,
+    not a purpose-built Adionics product server, and Adionics documents it nowhere.
+tools: []
+tools_gated: true
+gating_evidence:
+- request: '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+  status: 401
+  body: '{"code":"rest_forbidden","message":"...","data":{"status":401}}'
+- request: '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18"}}'
+  status: 401
+  body: '{"code":"rest_forbidden","message":"...","data":{"status":401}}'
+- request: 'GET /wp-json/wp-abilities/v1/abilities'
+  status: 401
+  body: '{"code":"rest_forbidden","message":"...","data":{"status":401}}'
+detail: >-
+  The endpoint is genuinely served — the `mcp` namespace and both of its routes appear in the public
+  REST index, and the route accepts POST/GET/DELETE — but every JSON-RPC method, including
+  initialize, is refused to an anonymous client with HTTP 401 rest_forbidden. The tool set is
+  therefore auth-gated and could not be enumerated. Authentication is WordPress Application
+  Passwords (HTTP Basic), issued only from wp-admin to an existing Adionics WordPress user; there is
+  no self-service path to a credential. The backing capability set would be the WordPress Abilities
+  API at /wp-json/wp-abilities/v1/abilities, which is gated by the same check. Nothing is asserted
+  here about which tools exist — none were observed, and none are invented.
+oauth_discovery:
+  '/.well-known/oauth-authorization-server': 404
+  '/.well-known/oauth-protected-resource': 404
+  detail: >-
+    The MCP endpoint publishes no OAuth discovery metadata; it does not implement the MCP
+    authorization spec, it reuses WordPress's own cookie/Basic auth.

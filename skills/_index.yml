@@ -1,0 +1,19 @@
+generated: '2026-09-07'
+method: generated
+source: >-
+  Grounded in the openapi/ documents in this repo, every operationId of which was verified against
+  the live route index and live responses at https://www.adionics.com/wp-json/ on 2026-09-07.
+note: >-
+  Adionics publishes no AGENTS.md and no skill files of its own; a search of adionics.com and of
+  GitHub found none. These two skills were authored by API Evangelist over the observed public
+  surface. There is no third skill for a write or transactional flow because Adionics exposes no
+  write surface to any public client.
+skills:
+- file: adionics-read-newsroom.md
+  name: Read the Adionics newsroom
+  api: openapi/adionics-posts-api-openapi.yml
+  operations: [listPosts, getPost, listCategories, getUser, getMediaItem]
+- file: adionics-harvest-site-content.md
+  name: Harvest the Adionics site content and media
+  api: openapi/adionics-pages-api-openapi.yml
+  operations: [listPages, getPage, listMedia, getMediaItem, listCategories, listTaxonomies, listLanguages, search, getRouteIndex]

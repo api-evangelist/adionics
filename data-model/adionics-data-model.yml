@@ -1,0 +1,91 @@
+generated: '2026-09-07'
+method: derived
+source: >-
+  Derived from openapi/ and from the id-reference fields observed on live responses at
+  https://www.adionics.com/wp-json/ on 2026-09-07.
+note: >-
+  This is the WordPress content model as instantiated on adionics.com, not a domain model of
+  Adionics' lithium-extraction business. Adionics exposes no process, plant, brine or project data
+  through any API.
+entities:
+- name: Post
+  path: /wp/v2/posts
+  count_at_capture: 228
+  identifier: id (integer)
+  description: A dated news or press item from the Adionics newsroom.
+- name: Page
+  path: /wp/v2/pages
+  count_at_capture: 29
+  identifier: id (integer)
+  description: A static site page. Hierarchical — e.g. /in-few-words/careers/ is a child of /in-few-words/.
+- name: MediaItem
+  path: /wp/v2/media
+  count_at_capture: 551
+  identifier: id (integer)
+  description: An uploaded attachment with its generated size renditions.
+- name: Term
+  path: /wp/v2/categories, /wp/v2/tags
+  count_at_capture: 4 categories, 0 tags
+  identifier: id (integer)
+  description: A classification term. Categories are hierarchical; tags are registered but unused.
+- name: User
+  path: /wp/v2/users
+  count_at_capture: 3
+  identifier: id (integer)
+  description: A public author record.
+- name: Language
+  path: /pll/v1/languages
+  count_at_capture: 2
+  identifier: term_id (integer) / slug
+  description: A Polylang language. English (en_GB) and Spanish (es_ES) trees exist on the site.
+relationships:
+- from: Post
+  to: User
+  kind: belongs_to
+  via: author
+  resolve: /wp/v2/users/{author}
+- from: Post
+  to: MediaItem
+  kind: has_one
+  via: featured_media
+  resolve: /wp/v2/media/{featured_media}
+- from: Post
+  to: Term
+  kind: has_many
+  via: categories
+  resolve: /wp/v2/categories/{id}
+- from: Post
+  to: Term
+  kind: has_many
+  via: tags
+  resolve: /wp/v2/tags/{id}
+- from: Page
+  to: Page
+  kind: belongs_to
+  via: parent
+  resolve: /wp/v2/pages/{parent}
+- from: Page
+  to: User
+  kind: belongs_to
+  via: author
+  resolve: /wp/v2/users/{author}
+- from: Page
+  to: MediaItem
+  kind: has_one
+  via: featured_media
+  resolve: /wp/v2/media/{featured_media}
+- from: MediaItem
+  to: Post
+  kind: belongs_to
+  via: post
+  resolve: /wp/v2/posts/{post}
+- from: Term
+  to: Term
+  kind: belongs_to
+  via: parent
+  resolve: /wp/v2/categories/{parent}
+traversal:
+  detail: >-
+    Every relationship above can be resolved in one round trip with the `_embed` query parameter,
+    which inlines author, featured media and terms into an `_embedded` member. Each object also
+    carries HAL-style `_links` naming the same targets.

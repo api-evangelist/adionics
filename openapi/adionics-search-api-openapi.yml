@@ -1,0 +1,163 @@
+openapi: 3.1.0
+info:
+  title: Adionics Search API
+  version: wp/v2
+  description: Public, unauthenticated cross-content search over adionics.com — posts and pages — returning lightweight
+    id / title / url / type / subtype records. 267 searchable objects at capture (2026-09-07).
+  contact:
+    name: Adionics
+    url: https://www.adionics.com/contact/
+  x-api-evangelist:
+    generated: '2026-09-07'
+    method: derived
+    source: https://www.adionics.com/wp-json/ (live WordPress REST route index, fetched 2026-09-07)
+    note: Derived from the self-describing WordPress REST route index published at https://www.adionics.com/wp-json/
+      and from live anonymous responses observed on 2026-09-07. Adionics publishes no OpenAPI of its own; every
+      path, method, parameter and response field below was observed on the live surface, none were invented.
+servers:
+- url: https://www.adionics.com/wp-json
+  description: Adionics WordPress REST API root
+tags:
+- name: Search
+paths:
+  /wp/v2/search:
+    get:
+      operationId: search
+      summary: Search site content
+      description: 'Anonymous access verified 2026-09-07 (HTTP 200, X-WP-Total: 267 with no query; 233 for `search=adionics`).'
+      tags:
+      - Search
+      parameters:
+      - name: search
+        in: query
+        description: The search term.
+        schema:
+          type: string
+      - name: type
+        in: query
+        schema:
+          type: string
+          enum:
+          - post
+          - term
+          - post-format
+          default: post
+      - name: subtype
+        in: query
+        schema:
+          type: string
+          default: any
+      - name: page
+        in: query
+        schema:
+          type: integer
+          default: 1
+      - name: per_page
+        in: query
+        schema:
+          type: integer
+          default: 10
+          maximum: 100
+      - name: _fields
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A page of search results.
+          headers:
+            X-WP-Total:
+              description: Total number of items in the collection.
+              schema:
+                type: integer
+            X-WP-TotalPages:
+              description: Total number of pages available.
+              schema:
+                type: integer
+            Link:
+              description: RFC 8288 pagination links (`rel="next"` / `rel="prev"`).
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SearchResult'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+components:
+  schemas:
+    WPError:
+      type: object
+      description: The WordPress REST API error envelope. Not RFC 9457 problem+json.
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        data:
+          type: object
+          properties:
+            status:
+              type: integer
+      required:
+      - code
+      - message
+      - data
+    SearchResult:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        url:
+          type: string
+          format: uri
+        type:
+          type: string
+          enum:
+          - post
+        subtype:
+          type: string
+          enum:
+          - post
+          - page
+        _links:
+          type: object
+  responses:
+    NotFound:
+      description: The requested object does not exist, or is not publicly readable.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WPError'
+          example:
+            code: rest_post_invalid_id
+            message: Invalid post ID.
+            data:
+              status: 404
+    Forbidden:
+      description: The requested route or field requires an authenticated WordPress user. Returned anonymously as
+        HTTP 401 with code `rest_forbidden`.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WPError'
+          example:
+            code: rest_forbidden
+            message: Sorry, you are not allowed to do that.
+            data:
+              status: 401
+    BadRequest:
+      description: An invalid parameter was supplied.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WPError'
+          example:
+            code: rest_invalid_param
+            message: 'Invalid parameter(s): per_page'
+            data:
+              status: 400

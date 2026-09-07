@@ -1,0 +1,66 @@
+generated: '2026-09-07'
+method: probed
+source: >-
+  Live probes of https://www.adionics.com/wp-json/ on 2026-09-07 — the REST route index's
+  `authentication` member, plus observed anonymous responses on public and gated routes.
+summary:
+  types:
+  - none
+  - http
+  api_key_in: []
+  oauth2_flows: []
+  note: >-
+    Adionics publishes no developer authentication documentation of any kind. The surface below was
+    established entirely by probing the live WordPress REST API behind www.adionics.com.
+public_surface:
+  authentication: none
+  description: >-
+    The published read surface — posts, pages, media, categories, tags, search, users, types,
+    statuses, taxonomies, the route index, the Polylang language registry and the oEmbed endpoint —
+    returns HTTP 200 to a completely anonymous client. No key, token, cookie or nonce is required
+    and none is accepted for additional access.
+  verified: '2026-09-07'
+schemes:
+- name: WordPress Application Passwords
+  type: http
+  scheme: basic
+  description: >-
+    The only authentication mechanism the install advertises. The REST route index declares
+    `authentication.application-passwords.endpoints.authorization`, pointing at
+    https://www.adionics.com/wp-admin/authorize-application.php. Credentials are issued to existing
+    WordPress users from wp-admin and presented as HTTP Basic. There is no self-service signup, no
+    public registration, and no developer program — an application password can only be created by
+    someone who already holds an Adionics WordPress account.
+  authorization_endpoint: https://www.adionics.com/wp-admin/authorize-application.php
+  source: https://www.adionics.com/wp-json/
+  applies_to:
+  - /wp/v2/settings
+  - /wp/v2/plugins
+  - /wp/v2/themes
+  - /wp/v2/elementor_library
+  - /wp-abilities/v1/abilities
+  - /mcp/mcp-adapter-default-server
+  - any request with context=edit
+gated_observations:
+- path: /wp-json/mcp/mcp-adapter-default-server
+  method: POST
+  body: '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+  status: 401
+  code: rest_forbidden
+  note: The MCP endpoint is served but every JSON-RPC method is gated behind the same WordPress user check.
+- path: /wp-json/wp-abilities/v1/abilities
+  status: 401
+  code: rest_forbidden
+- path: /wp-json/wp/v2/settings
+  status: 401
+  code: rest_forbidden
+error_envelope:
+  shape: WordPress REST error
+  example:
+    code: rest_forbidden
+    message: "Désolé, vous n’avez pas l’autorisation de faire cela."
+    data:
+      status: 401
+  note: >-
+    Denials are returned with HTTP status 401 and a `code` of `rest_forbidden`. Messages are
+    localised to French even on the English site.
