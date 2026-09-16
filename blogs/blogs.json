@@ -1,0 +1,21 @@
+{
+  "repo": "adionics",
+  "feeds": [
+    {
+      "source": "https://www.adionics.com/news/",
+      "feed_url": "https://www.adionics.com/news/feed/",
+      "title": "",
+      "saved": 0,
+      "method": "discovered"
+    },
+    {
+      "source": "https://www.adionics.com/in-few-words/",
+      "feed_url": "https://www.adionics.com/in-few-words/feed/",
+      "title": "",
+      "saved": 0,
+      "method": "discovered"
+    }
+  ],
+  "post_count": 0,
+  "fetched": "2026-09-13T13:00:00Z"
+}
