@@ -1,0 +1,28 @@
+{
+  "provider": "adionics",
+  "sources": [
+    "adionics-discovery-api-openapi.yml",
+    "adionics-media-api-openapi.yml",
+    "adionics-pages-api-openapi.yml",
+    "adionics-posts-api-openapi.yml",
+    "adionics-search-api-openapi.yml",
+    "adionics-taxonomy-api-openapi.yml"
+  ],
+  "outputs": [
+    "adionics-discovery-api-openapi.yml",
+    "adionics-media-api-openapi.yml",
+    "adionics-pages-api-openapi.yml",
+    "adionics-posts-api-openapi.yml",
+    "adionics-search-api-openapi.yml",
+    "adionics-taxonomy-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [
+    "no openapi/_original/ archive: this run re-split PREVIOUSLY REFINED output, so any base URL it carries is inherited from an earlier pass rather than read from a document the provider published"
+  ],
+  "notes": [
+    "apis.yml register: already-registered"
+  ],
+  "skipped": []
+}
