@@ -36,176 +36,21 @@ tags:
 - Geothermal
 - Industrial Process Technology
 - Sustainability
-- Content
 apis:
-- aid: adionics:adionics-posts-api
-  name: Adionics Posts API
-  description: >-
-    Public, unauthenticated read access to the Adionics news and press archive — company milestones,
-    partnership announcements, pilot-plant results and conference appearances — via the WordPress core
-    REST API. Verified live at 228 published posts on 2026-09-07.
-  humanURL: https://www.adionics.com/wp-json/
+- aid: adionics:adionics-com-website-wordpress-rest
+  name: Adionics Website (WordPress REST)
+  description: 'The public WordPress REST API (wp-json) of the Adionics website at www.adionics.com: the
+    route index of the site''s content management system, catalogued as one site surface rather than as
+    separate APIs.'
   baseURL: https://www.adionics.com/wp-json
   tags:
-  - Posts
-  - Content
+  - WordPress
+  x-surface: platform-generated
   properties:
-  - type: OpenAPI
-    url: openapi/adionics-posts-api-openapi.yml
-  - type: Overlay
-    url: overlays/adionics-posts-api-overlay.yaml
-  - type: Authentication
-    url: authentication/adionics-authentication.yml
-  - type: ErrorCatalog
-    url: errors/adionics-problem-types.yml
-  - type: Conventions
-    url: conventions/adionics-conventions.yml
-  - type: DataModel
-    url: data-model/adionics-data-model.yml
-  - type: Conformance
-    url: conformance/adionics-conformance.yml
-  - type: Lifecycle
-    url: lifecycle/adionics-lifecycle.yml
-- aid: adionics:adionics-pages-api
-  name: Adionics Pages API
-  description: >-
-    Public, unauthenticated read access to the static pages of adionics.com — Our Technology, Our Offer,
-    Markets, Applications, Expertise, Adionics' History, Management Team, Careers, Contact and the legal
-    pages — in both the English and Spanish trees. Verified live at 29 published pages on 2026-09-07.
-  humanURL: https://www.adionics.com/wp-json/
-  baseURL: https://www.adionics.com/wp-json
-  tags:
-  - Pages
-  - Content
-  properties:
-  - type: OpenAPI
-    url: openapi/adionics-pages-api-openapi.yml
-  - type: Overlay
-    url: overlays/adionics-pages-api-overlay.yaml
-  - type: Authentication
-    url: authentication/adionics-authentication.yml
-  - type: ErrorCatalog
-    url: errors/adionics-problem-types.yml
-  - type: Conventions
-    url: conventions/adionics-conventions.yml
-  - type: DataModel
-    url: data-model/adionics-data-model.yml
-  - type: Conformance
-    url: conformance/adionics-conformance.yml
-  - type: Lifecycle
-    url: lifecycle/adionics-lifecycle.yml
-- aid: adionics:adionics-media-api
-  name: Adionics Media API
-  description: >-
-    Public, unauthenticated read access to the adionics.com media library — pilot and plant photography,
-    process diagrams, downloadable brochures and press assets, each with its generated size variants and
-    source URL. Verified live at 551 attachments on 2026-09-07.
-  humanURL: https://www.adionics.com/wp-json/
-  baseURL: https://www.adionics.com/wp-json
-  tags:
-  - Media
-  - Content
-  properties:
-  - type: OpenAPI
-    url: openapi/adionics-media-api-openapi.yml
-  - type: Overlay
-    url: overlays/adionics-media-api-overlay.yaml
-  - type: Authentication
-    url: authentication/adionics-authentication.yml
-  - type: ErrorCatalog
-    url: errors/adionics-problem-types.yml
-  - type: Conventions
-    url: conventions/adionics-conventions.yml
-  - type: DataModel
-    url: data-model/adionics-data-model.yml
-  - type: Conformance
-    url: conformance/adionics-conformance.yml
-  - type: Lifecycle
-    url: lifecycle/adionics-lifecycle.yml
-- aid: adionics:adionics-taxonomy-api
-  name: Adionics Taxonomy API
-  description: >-
-    Public, unauthenticated read access to the classification terms behind adionics.com — the four post
-    categories used across the English and Spanish news trees, the registered (and currently unused) post
-    tag vocabulary, and the taxonomy registry itself.
-  humanURL: https://www.adionics.com/wp-json/
-  baseURL: https://www.adionics.com/wp-json
-  tags:
-  - Categories
-  - Tags
-  - Taxonomy
-  properties:
-  - type: OpenAPI
-    url: openapi/adionics-taxonomy-api-openapi.yml
-  - type: Overlay
-    url: overlays/adionics-taxonomy-api-overlay.yaml
-  - type: Authentication
-    url: authentication/adionics-authentication.yml
-  - type: ErrorCatalog
-    url: errors/adionics-problem-types.yml
-  - type: Conventions
-    url: conventions/adionics-conventions.yml
-  - type: DataModel
-    url: data-model/adionics-data-model.yml
-  - type: Conformance
-    url: conformance/adionics-conformance.yml
-  - type: Lifecycle
-    url: lifecycle/adionics-lifecycle.yml
-- aid: adionics:adionics-search-api
-  name: Adionics Search API
-  description: >-
-    Public, unauthenticated cross-content search over adionics.com — posts and pages together — returning
-    lightweight id / title / url / type / subtype records. Verified live at 267 searchable objects on
-    2026-09-07.
-  humanURL: https://www.adionics.com/wp-json/
-  baseURL: https://www.adionics.com/wp-json
-  tags:
-  - Search
-  - Content
-  properties:
-  - type: OpenAPI
-    url: openapi/adionics-search-api-openapi.yml
-  - type: Overlay
-    url: overlays/adionics-search-api-overlay.yaml
-  - type: Authentication
-    url: authentication/adionics-authentication.yml
-  - type: ErrorCatalog
-    url: errors/adionics-problem-types.yml
-  - type: Conventions
-    url: conventions/adionics-conventions.yml
-  - type: Conformance
-    url: conformance/adionics-conformance.yml
-  - type: Lifecycle
-    url: lifecycle/adionics-lifecycle.yml
-- aid: adionics:adionics-discovery-api
-  name: Adionics Discovery API
-  description: >-
-    Public, unauthenticated discovery metadata for adionics.com — the self-describing REST route index
-    (370 routes across 23 namespaces at capture), the registered content types and publication statuses,
-    the public author records, the Polylang language registry covering the English and Spanish sites, and
-    the oEmbed 1.0 provider endpoint. This is the surface that makes the rest of the API machine-readable
-    in the absence of any published documentation.
-  humanURL: https://www.adionics.com/wp-json/
-  baseURL: https://www.adionics.com/wp-json
-  tags:
-  - Discovery
-  - Metadata
-  - oEmbed
-  properties:
-  - type: OpenAPI
-    url: openapi/adionics-discovery-api-openapi.yml
-  - type: Overlay
-    url: overlays/adionics-discovery-api-overlay.yaml
-  - type: Authentication
-    url: authentication/adionics-authentication.yml
-  - type: ErrorCatalog
-    url: errors/adionics-problem-types.yml
-  - type: Conventions
-    url: conventions/adionics-conventions.yml
-  - type: Conformance
-    url: conformance/adionics-conformance.yml
-  - type: Lifecycle
-    url: lifecycle/adionics-lifecycle.yml
+  - type: Documentation
+    url: https://www.adionics.com/wp-json
+  x-platform: wordpress
+  x-platform-surface: rest
 - aid: adionics:adionics-mcp-server
   name: Adionics MCP Server
   description: >-
@@ -227,6 +72,9 @@ apis:
     url: mcp/adionics-tool-crosswalk.yml
   - type: Authentication
     url: authentication/adionics-authentication.yml
+  x-surface: platform-generated
+  x-platform: wordpress
+  x-platform-surface: mcp-plugin
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
