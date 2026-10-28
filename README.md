@@ -64,40 +64,108 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Adionics is a French cleantech company founded in 2012 in Paris by Guillaume de Souza, out of
-research into liquid-liquid salt extraction begun in 2007. It develops and licenses a patented
-Direct Lithium Extraction (DLE) process built on **Flionex** — a proprietary, thermally regenerated,
-highly selective liquid salt absorbent that captures lithium salts from brine at ambient temperature
-and releases them at higher temperature in a closed loop, with no traditional reagents and more than
-90% less water than evaporation ponds. Adionics sells a four-stage engagement to mining operators
-(modeling study, lab-scale bench test, on-site pilot plant, then basic engineering and commissioning
-support for a commercial plant), targeting lithium-rich salars, geothermal brines, oil-and-gas
-produced water, industrial effluents and battery recycling streams.
+Adionics is a French cleantech company founded in 2012 in Paris by Guillaume de Souza, out of research into liquid-liquid salt extraction started in 2007. It develops and licenses a patented Direct Lithium Extraction (DLE) process built on Flionex, a proprietary, thermally regenerated and highly selective liquid salt absorbent that captures lithium salts from brine at ambient temperature and releases them at higher temperature in a closed loop, with no traditional reagents and more than 90% less water than evaporation ponds. The company sells a staged engagement to mining operators — a proprietary modeling study, a lab-scale bench test, an on-site pilot plant, and basic engineering plus commissioning support for a commercial plant — targeting lithium-rich salars, geothermal brines, oil-and-gas produced water, industrial effluents and battery recycling streams. It has run 1,500 hours of continuous lithium extraction in the Salar de Atacama, opened a pilot test centre in Salta Province, Argentina, and raised roughly $40M across four rounds. Adionics is a process-technology and engineering company, not a software vendor, and publishes no developer portal, no product API, no SDKs and no OpenAPI. The only machine-readable interface it exposes is the WordPress REST content API behind www.adionics.com, which is anonymously readable, read-only for the public, and captured here for discovery.
 
-## API surface
+**Areas:** Company · Cleantech · Lithium · Direct Lithium Extraction · Mining · Battery Materials · Water Treatment · Desalination · Geothermal · Industrial Process Technology · Sustainability
 
-**Adionics is a process-technology and engineering company, not a software vendor.** It publishes no
-developer portal, no API documentation, no OpenAPI, no SDKs, no CLI and no public GitHub
-organization, and it sells no API product. There is no lithium, brine, assay, plant or project data
-available through any interface.
+## Adionics on APIs.io
 
-What this profile captures is the one machine-readable surface the company does serve: the
-**WordPress REST content API** behind `www.adionics.com`, which is anonymously readable and
-read-only for the public. Verified live on 2026-09-07: 228 news posts, 29 static pages across the
-English and Spanish trees, 551 media attachments, 4 categories, 267 searchable objects, and a
-self-describing route index listing 370 routes across 23 namespaces. The six OpenAPI documents in
-`openapi/` were **derived by API Evangelist** from that route index and from live anonymous
-responses — Adionics publishes none of them itself.
+Everything profiled for Adionics is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/adionics/](https://apis.io/providers/adionics/)** — or go straight to one of the APIs or properties below.
 
-The install also registers a live **Model Context Protocol endpoint** at
-`/wp-json/mcp/mcp-adapter-default-server` (WordPress MCP Adapter plugin, alongside the WordPress
-Abilities API). The route is served, but `initialize` and `tools/list` both return HTTP 401
-`rest_forbidden` to an anonymous client, so the tool set is auth-gated and was not enumerated. No
-tools are asserted here.
+### APIs (2)
 
-No `/.well-known/` document of any kind is served, no A2A agent card exists, and no security.txt,
-trust centre, status page, changelog, sandbox, webhook or event surface was found. Those absences
-are recorded in the artifacts rather than left blank.
+- [Adionics Website (WordPress REST)](https://apis.io/apis/adionics/adionics-com-website-wordpress-rest/) — The public WordPress REST API (wp-json) of the Adionics website at www.adionics.com: the route index of the site's content management system, catalogued as…
+- [Adionics MCP Server](https://apis.io/apis/adionics/adionics-mcp-server/) — A live Model Context Protocol endpoint registered on the adionics.com WordPress install by the WordPress MCP Adapter, at…
 
-- <https://www.adionics.com/>
-- <https://www.adionics.com/wp-json/>
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [mcp-adapter-default-server](https://apis.io/servers/adionics/mcp-adapter-default-server/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Adionics Authentication](https://apis.io/security/adionics/adionics-authentication/)
+- [Adionics Domain Security](https://apis.io/security/adionics/adionics-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Adionics Plans Pricing](https://apis.io/plans/adionics/adionics-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Adionics Rate Limits](https://apis.io/rate-limits/adionics/adionics-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.adionics.com/)
+- [Blog](https://www.adionics.com/news/)
+- [Terms of service](https://www.adionics.com/credits-terms-conditions/)
+- [Privacy policy](https://www.adionics.com/politique-de-confidentialite/)
+
+## API Evangelist rating
+
+**Kin Score 18.9** — emerging · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 60.0 |
+| Contract quality | 6.5 |
+| Contract governance | 4.5 |
+| Operational transparency | 0.0 |
+| Developer ergonomics | 25.6 |
+| Access clarity | 21.1 |
+
+**Agent readiness 10.1** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | — |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | platform (partial credit) |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | documented (partial credit) |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | na |
+
+**Regulatory alignment 24.5** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/adionics/](https://apis.io/providers/adionics/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Adionics: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/adionics/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
